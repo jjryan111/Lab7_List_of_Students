@@ -12,45 +12,46 @@ namespace Lab7
         static void Main(string[] args)
         {
             string yesNo = "y";
-            while (yesNo == "Y" || yesNo == "y")
+            while (yesNo == "y")
             {
                 Console.Clear();
-                int whichStudent = GetInput("Which student? ", 1, 20);
-                //   int data = FindStudent(whichStudent); //TODO
-                EnterData();
+                List<List<string>> studentInfo = EnterData(); //Fill 
+                int whichStudent = GetInput("Which student? (Enter a number between 1 and 6): ", "That student doesn't exist!. Please enter a valid student number. ", 1, 6);
+                List <string> selected = SelectStudent(studentInfo, whichStudent);
+                int whatData = GetInput("What would you like to know? Type 1 for name, 2 for hometown, or 3 for favorite food, or 4 for full info: ", "Please enter 1,2,3 or 4: ", 1, 4);
+                if (whatData == 4)
+                {
+                    foreach (string i in selected)
+                    {
+                        Console.Write(i + "\t ");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(selected[(whatData - 1)]);
+                }
                 yesNo = ynInput();
-
             }
 
         }
-        public static void EnterData()
+        public static List<List<string>> EnterData()
         {
-            int inputNum = 10;
-            string a = "1";
-            string b = "2";
-            string c = "3";
-            string d = "4";
-
             List<List<string>> studentInfo = new List<List<string>>();
-            for (int i = 0; i < inputNum; i++)
-            {
-                studentInfo.Add(new List<string> { a, b, c, d });
-               // Console.WriteLine(studentInfo[i]);
-                //foreach(string j in studentInfo[i])
-                //{
-                //    Console.WriteLine(j);
-                //}
-            }
-            Hashtable info = new Hashtable();
-            for (int i = 0; i < inputNum; i++)
-            {
-                info.Add(i, studentInfo[i]);
-   //            Console.WriteLine(studentInfo[i]);
-                Console.WriteLine(info[i]);
-            }
-            Console.WriteLine(info[0]);
+//                studentInfo.Add(new List<string> { a, b, c, d });
+            studentInfo.Add(new List<string> { "Tori", "Marne, MI", "Chocolate" });
+            studentInfo.Add(new List<string> { "Megan", "Lansing, MI", "Salad" });
+            studentInfo.Add(new List<string> { "Steph", "Highland", "Seafood" });
+            studentInfo.Add(new List<string> { "Jillane", "Rockford", "Sushi" });
+            studentInfo.Add(new List<string> { "JJ", "Lake Orion, MI", "Strawberries" });
+            studentInfo.Add(new List<string> { "Tommy", "Raleigh, NC AKA Rough Raleigh", "Chicken Curry" });
+            return studentInfo;
         }
-        public static int GetInput(string question, int bottomNum, int topNum)
+        public static List<string> SelectStudent(List<List<string>> info, int selectNum)
+        {
+            List<string> attributes = info[(selectNum-1)];
+            return attributes;
+        }
+        public static int GetInput(string question, string error, int bottomNum, int topNum)
         {
             bool validInput = false;
             int exitNum = 0;
@@ -60,7 +61,7 @@ namespace Lab7
                 bool inp = int.TryParse(Console.ReadLine(), out exitNum);
                 if (!inp || exitNum < bottomNum || exitNum > topNum)
                 {
-                    Console.WriteLine("That student doesn't exist!. Please enter a valid student number. ");
+                    Console.WriteLine(error);
                 }
                 else
                 {
@@ -69,25 +70,6 @@ namespace Lab7
             }
             return exitNum;
         }
-        public static string GetInputString(string question)
-        {
-            bool input = false;
-            string exitString = "";
-            while (!input)
-            {
-                Console.Write(question);
-                exitString = Console.ReadLine();
-                if (exitString == "")
-                {
-                    Console.WriteLine("\nPlease enter some text.\n");
-                }
-                else
-                {
-                    input = true;
-                }
-            }
-            return exitString;
-        }
         public static string ynInput()
         // Gets a y or n.
         {
@@ -95,7 +77,7 @@ namespace Lab7
             bool invalid = true;
             while (invalid)
             {
-                Console.Write("\n\nTranslate another line? (y/n): ");
+                Console.Write("\n\nMore student info? (y/n): ");
                 input = Console.ReadLine();
                 input = input.ToLower();
                 if (input == "y" || input == "n")
